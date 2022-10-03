@@ -1,0 +1,6 @@
+# Build and Release Folders
+Scripts
+Lib
+Include
+pyvenv.cfg
+ChatBot/manage.py
