@@ -1,5 +1,3 @@
-from symbol import parameters
-from sys import api_version
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,20 +9,25 @@ from requests import Session
 # Create your views here.
 @csrf_exempt
 def webhook(request):
+    if request.method == "GET":
+        return HttpResponse(request.GET.get('hub.challenge'))
     if request.method == "POST":
-        test = json.loads(request.body)
-        print(request.body)
-        name = test['entry'][0]['changes'][0]['value']['contacts'][0]['profile']['name']
-        from_number = test['entry'][0]['changes'][0]['value']['messages'][0]['from']
-        to_number = test['entry'][0]['changes'][0]['value']['metadata']['display_phone_number']
-        message_text = test['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
-        if not Contact.objects.filter(phone_number = from_number).exists():
-            Contact.objects.create(name = name, phone_number = from_number)
+        try:
+            test = json.loads(request.body)
+            name = test['entry'][0]['changes'][0]['value']['contacts'][0]['profile']['name']
+            from_number = test['entry'][0]['changes'][0]['value']['messages'][0]['from']
+            to_number = test['entry'][0]['changes'][0]['value']['metadata']['display_phone_number']
+            message_text = test['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
         
-        contact = Contact.objects.get(phone_number = from_number)
+            if not Contact.objects.filter(phone_number = from_number).exists():
+                Contact.objects.create(name = name, phone_number = from_number)
+            
+            contact = Contact.objects.get(phone_number = from_number)
 
-        Message.objects.create(from_number=from_number, to_number = to_number, message_text = message_text, contact_id = contact)
-    return HttpResponse("Teste")
+            Message.objects.create(from_number=from_number, to_number = to_number, message_text = message_text, contact_id = contact)
+        except:
+            print('POST não reconhecido')
+    return HttpResponse("200")
 
 def chat(request):
     contact = Contact.objects.all()
