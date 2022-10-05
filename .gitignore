@@ -4,3 +4,4 @@ Lib
 Include
 pyvenv.cfg
 ChatBot/manage.py
+ChatBot/db.sqlite3
