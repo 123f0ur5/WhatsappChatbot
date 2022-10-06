@@ -6,6 +6,7 @@ from django.db import models
 class Contact(models.Model):
     name = models.CharField(max_length=32)
     phone_number = models.CharField(max_length=16, unique=True)
+    first_message = models.BooleanField(default=True)
 
     def get_absolute_url(self):
         return f"/chat/{self.id}"
