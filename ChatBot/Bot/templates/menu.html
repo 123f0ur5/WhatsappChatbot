@@ -1,0 +1,16 @@
+Select your products
+
+{% block content %}
+<form method="POST">{% csrf_token %}
+    {% for category, products in categories.items %}
+        {% if products.count > 0 %}
+            <h1>{{ category.name }}</h1>
+            {% for product in products %}
+                <p>{{ product.name }} - ${{ product.price }} - {{ product.description }}<input type="number" 
+                name="{{ product.id }}" min="0" value="0"></p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <input type="submit" value="Place Order"></button>
+</form>
+{% endblock %}

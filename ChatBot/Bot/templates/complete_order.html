@@ -1,0 +1,19 @@
+{% block content %}
+It's almost done {{ name }}!!<br>
+The total is ${{ total }}
+
+
+    <form method="POST">{% csrf_token %}
+        <label>Address Line 1</label>
+        <input type="text" name="Address1" required><br>
+        <label>Address Line 2</label>
+        <input type="text" name="Address2"><br>
+        <label>Apartment, suite</label>
+        <input type="text" name="Apartment"><br>
+        <label>Zip Code</label>
+        <input type="text" name="Zip_code" required><br>
+        <label>Observation</label>
+        <textarea name ="Observation" rows="5" placeholder="If you need something else!" maxlength="250"></textarea><br>
+        <input type="submit" value="Complete Order">
+    </form>
+{% endblock %}
