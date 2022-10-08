@@ -1,0 +1,9 @@
+Active Orders<br>
+
+{% block content %}
+    {% for order in orders %}
+        <p>
+            <a href="{{ order.get_absolute_url }}">{{ order.contact_id.name }}</a>- {{ order.order_date|time:"H:i" }} - {{ order.status }}
+        </p> 
+    {% endfor %}
+{% endblock %}

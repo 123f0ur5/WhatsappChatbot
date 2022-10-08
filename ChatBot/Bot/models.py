@@ -43,10 +43,15 @@ class Orders(models.Model):
     deliver_address = models.TextField(blank=True)
     status = models.CharField(max_length=12, blank=True)
     observation = models.CharField(max_length=250, blank=True)
+
+    def get_absolute_url(self):
+        return f"/manage/{self.id}"
+
     class Meta: verbose_name_plural = 'Orders'
 
 class Order_Products(models.Model):
     order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+    total = models.FloatField()
     class Meta: verbose_name_plural = 'Order_Products'
