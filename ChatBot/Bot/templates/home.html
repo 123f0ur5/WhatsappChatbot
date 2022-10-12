@@ -1,7 +1,5 @@
 {% block content %}
-Select the number
-
-{% for number in contact %}
-    <p><a href='{{ number.get_absolute_url }}'>{{ number.phone_number }}</a> - {{ number.name }}</p>
-{% endfor %}
+    <a href="{% url 'chat' %}">Chat</a>
+    <a href="{% url 'manage' %}">Manage</a>
+    <a href="{% url 'menu' %}">Menu</a>
 {% endblock %}

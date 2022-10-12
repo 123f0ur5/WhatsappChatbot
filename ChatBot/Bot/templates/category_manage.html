@@ -1,0 +1,8 @@
+Categories<br>
+
+{% block content %}
+    {% for category in categories %}
+        <p>{{ category.id }}-{{ category.name }} <a href="{% url 'category_delete' category.id %}"><button type="button">Delete</button></a></p>
+    {% endfor %}
+    <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
+{% endblock %}

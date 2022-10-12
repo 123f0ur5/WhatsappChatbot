@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-p@az7qf_5!8c%@i==13-az3(ii7o0by=l5_#eyq*fr(5bvsa#1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['4281-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://*.4281-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io']
+ALLOWED_HOSTS = ['0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['https://*.0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io']
 
 
 # Application definition
@@ -111,7 +111,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -124,4 +124,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-API_TOKEN = 'EAAMhCXZAGkHwBALoCZBtZBlnrXCxZC6cgWGj8TeN6qRstc6FwUN4LFpoiXCPDEEUWUwDZBPpZAx8RsCNZB75ca9wgz0g6sZAMVEvY8qVvcdnsgiZBR85CnZCnI4AvIi8sMJlW4Sqc8ZBEHKhuB4gh1ZAdV73qQnGdhYeH46Jpu7eFAZB6Q789pgt1KAvNawBo89Bx6nqDLeiEZCK3IBQZDZD'
+API_TOKEN = 'EAAMhCXZAGkHwBAHRndo5KvNDHvL0jsUcF1ZAkNHXZAkhfU2TIS3TKxZCrR5494rmnqo1CH2naBLc2ENtmL6dZAU45ycgMpuvhzmFleAu9KbZAOzX8UnKjsNOdrZBKTQaGG20EywSmExRiiEPOSAfl12t3XC32h2isoAoZBn0TMG0BxCx4B29r9xFOWBZAefHIOiZA5Q9lKrC4kQQZDZD'

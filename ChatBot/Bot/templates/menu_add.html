@@ -1,0 +1,11 @@
+Add product
+
+{% block content %}
+    <form method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
+        <input type="submit" value="Save">
+    </form>
+
+    
+{% endblock %}

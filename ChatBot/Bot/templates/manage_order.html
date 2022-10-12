@@ -1,8 +1,10 @@
+Products<br>
+
 {% block content %}
-Products
+{{ order.contact_id.name }} <a href="{{ order.contact_id.get_absolute_url }}"><button type="button">Contact</button></a>
 
 {% for product in products %}
-    <p>{{ product.product_id.name }} - Quantity: {{ product.quantity }} - Individual Price: ${{ product.product_id.price }} - Total: {{ product.total }}</p>
+    <p>{{ product.product_id.name }} - Quantity: {{ product.quantity }} - Individual Price: ${{ product.product_id.price }} - Total: ${{ product.total }}</p>
 {% endfor %}
     Total: ${{ order.total_value }}
     <form method="POST"> {% csrf_token %}

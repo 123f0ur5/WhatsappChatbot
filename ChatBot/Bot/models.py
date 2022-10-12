@@ -4,7 +4,6 @@ from django.db import models
 class Contacts(models.Model):
     name = models.CharField(max_length=32)
     phone_number = models.CharField(max_length=16, unique=True)
-    first_message = models.BooleanField(default=True)
     class Meta: verbose_name_plural = 'Contacts'
 
     def get_absolute_url(self):
@@ -14,7 +13,7 @@ class Messages(models.Model):
     from_number = models.CharField(max_length=16)
     to_number = models.CharField(max_length=16)
     message_text = models.TextField()
-    sent_datetime = models.DateTimeField(auto_now=True)
+    sent_datetime = models.DateTimeField()
     contact_id = models.ForeignKey(
         Contacts,
         on_delete=models.CASCADE
@@ -29,7 +28,7 @@ class Products(models.Model):
     name = models.CharField(max_length=80)
     price = models.FloatField()
     image = models.ImageField(blank=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     category = models.ForeignKey(
         Categories,
         on_delete=models.CASCADE
@@ -39,7 +38,7 @@ class Products(models.Model):
 class Orders(models.Model):
     contact_id = models.ForeignKey(Contacts, on_delete=models.CASCADE)
     total_value = models.FloatField(blank=True)
-    order_date = models.DateTimeField(auto_now=True)
+    order_date = models.DateTimeField(blank=True, null=True)
     deliver_address = models.TextField(blank=True)
     status = models.CharField(max_length=12, blank=True)
     observation = models.CharField(max_length=250, blank=True)

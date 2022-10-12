@@ -1,14 +1,15 @@
-from turtle import title
+from datetime import datetime
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Messages, Contacts, Products, Categories, Orders, Order_Products
+from .forms import ProductForm, CategoryForm
 import json
 from requests import Session
 from ChatBot.settings import API_TOKEN
 
 MENU_DIR = 'Menu/'
-MENU = 'https://4281-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io/menu'
+MENU = 'https://0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io/menu'
 OPTIONS = "1-See Menu\n2-Make an Order\n3-Promotions\n4-Address\n5-Opening hours"
 NUMBER = '14991202420'
 
@@ -25,6 +26,10 @@ RESPONSES = {
     "Delivering" : "Your order is on the way! It'll arrive soon",
     "Finish" : "Tell us more about your experience!\nIt was everything fine?",
     "Finish_Social" : "We're more than happy to invite you to our social media\n@Facebook\n@Instagram",
+    "Perfect" : "Happy to hear that, we're waiting you next time",
+    "Good" : "We're looking to improve so the next time will be everything perfect!",
+    "Bad" : "We're sad to hear that, can you explain why it was bad?",
+    "404Order" : "We're sad to hear that, we're looking for what happened with your order. We will call you soon",
 }
 
 def start_order(contact): #Send the Greetings for the first message
@@ -52,6 +57,14 @@ def check_status(contact, message): #Check what's user want to do
         answer = RESPONSES['Address']
     elif message.message_text == '5':
         answer = RESPONSES['Opening']
+    elif message.message_text == 'It was perfect!':
+        answer = RESPONSES['Perfect']
+    elif message.message_text == 'It was good!':
+        answer = RESPONSES['Good']
+    elif message.message_text == 'It was bad :(':
+        answer = RESPONSES['Bad']
+    elif message.message_text == 'I didn\'t get the order':
+        answer = RESPONSES['404Order']
     else:
         answer = RESPONSES['404']
     send_message(answer, contact.phone_number, contact)
@@ -79,15 +92,13 @@ def send_message(text, toNumber, toId): #Generic message template, parse the dat
     session = Session()
     session.headers.update(headers)
     try:
-        response = session.post(url, json=parameters)
-        data = json.loads(response.text)
-        Messages.objects.create(from_number=NUMBER, to_number = toNumber, message_text = text, contact_id = toId)
-        print(f"data: {data}")
+        session.post(url, json=parameters)
+        Messages.objects.create(from_number=NUMBER, to_number = toNumber, message_text = text, contact_id = toId, sent_datetime = datetime.now().replace(microsecond=0))
 
     except (ConnectionError) as e:
         print(e)
 
-def send_interactive_message(text, toNumber, toId): #Generic message template, parse the data and send to the Whatsapp API
+def send_interactive_message(text, toNumber, toId): #Interactive message template, parse the data and send to the Whatsapp API
     base_url = 'https://graph.facebook.com/'
     api_version = 'v15.0/'
     sender = '101210056108048/'
@@ -150,10 +161,8 @@ def send_interactive_message(text, toNumber, toId): #Generic message template, p
     session = Session()
     session.headers.update(headers)
     try:
-        response = session.post(url, json=parameters)
-        data = json.loads(response.text)
-        Messages.objects.create(from_number=NUMBER, to_number = toNumber, message_text = text, contact_id = toId)
-        print(f"data: {data}")
+        session.post(url, json=parameters)
+        Messages.objects.create(from_number=NUMBER, to_number = toNumber, message_text = text, contact_id = toId, sent_datetime = datetime.now().replace(microsecond=0))
 
     except (ConnectionError) as e:
         print(e)
@@ -164,32 +173,48 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
     if request.method == "GET":
         return HttpResponse(request.GET.get('hub.challenge'))
     if request.method == "POST":
+        completed = False
+        test = json.loads(request.body)
         try:
-            test = json.loads(request.body)
             name = test['entry'][0]['changes'][0]['value']['contacts'][0]['profile']['name']
             from_number = test['entry'][0]['changes'][0]['value']['messages'][0]['from']
             to_number = test['entry'][0]['changes'][0]['value']['metadata']['display_phone_number']
-            message_text = test['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+            sent_datetime = test['entry'][0]['changes'][0]['value']['messages'][0]['timestamp']
+            try:
+                message_text = test['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+                completed = True
+            except:
+                try:
+                    message_text = test['entry'][0]['changes'][0]['value']['messages'][0]['interactive']['list_reply']['title']
+
+                    completed = True
+                except:
+                    pass
+        except:
+            pass
+            
+        if completed:
+            sent_datetime = datetime.fromtimestamp(int(sent_datetime))
         
             if not Contacts.objects.filter(phone_number = from_number).exists():
                 Contacts.objects.create(name = name, phone_number = from_number)
             
             contact = Contacts.objects.get(phone_number = from_number)
 
-            message = Messages.objects.create(from_number=from_number, to_number = to_number, message_text = message_text, contact_id = contact)
+            Messages.objects.create(from_number=from_number, to_number = to_number, message_text = message_text, sent_datetime = sent_datetime, contact_id = contact)
 
-            if contact.first_message:
-                Contacts.objects.filter(phone_number = from_number).update(first_message = False)
+            message = Messages.objects.filter(from_number=from_number).order_by('-id')[:2]
+            if int((datetime.now() - message[1].sent_datetime).total_seconds()/60) > 180:
                 start_order(contact)
             else:
+                message = Messages.objects.filter().last()
                 check_status(contact, message)
-        except:
-            print('POST ignored')
-    return HttpResponse("Test")
+
+    return HttpResponse("200")
 
 def chat(request): #Show all numbers that messaged
     contact = Contacts.objects.all()
-    return render(request, 'home.html', {'contact' : contact})
+    return render(request, 'chat.html', {'contact' : contact})
 
 def chatting(request, id): #Send message to the user via textbox
     messages = Messages.objects.filter(contact_id = id)
@@ -201,7 +226,7 @@ def chatting(request, id): #Send message to the user via textbox
         
     return render(request, 'chatting.html', {'messages' : messages})
 
-def menu(request, number): #Get the itens that user wanna buy
+def client_menu(request, number): #Get the itens that user wanna buy
     if request.method == 'POST':
         total = 0
         contact = Contacts.objects.filter(phone_number = number)
@@ -213,13 +238,12 @@ def menu(request, number): #Get the itens that user wanna buy
                 total += product.price * int(quantity)
                 total_product = product.price * int(quantity)
                 Order_Products.objects.create(order_id = order, product_id = product, quantity = quantity, total = total_product)
-
         order.total_value = total
         order.save()
 
         return redirect(f'./{number}/{order.id}')
-    categorys = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
-    return render(request, 'menu.html', {'categories':categorys})
+    categories = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
+    return render(request, 'client_menu.html', {'categories':categories})
 
 def complete_order(request, number, order): #Get Address and aditional info to place the order
     contact = Contacts.objects.get(phone_number = number)
@@ -231,6 +255,7 @@ def complete_order(request, number, order): #Get Address and aditional info to p
         address = ' '.join((request.POST['Address1'], request.POST['Address2'], request.POST['Zip_code'], request.POST['Apartment']))
         order.observation = request.POST['Observation']
         order.deliver_address = address
+        order.order_date = datetime.now().replace(microsecond=0)
         order.save()
 
         update_order(contact,order)
@@ -257,3 +282,54 @@ def manage_order(request, id):
             return redirect('manage')
 
     return render(request, 'manage_order.html', {'products' : p_order, 'order' : order})
+
+def home(request):
+    return render(request, 'home.html', {})
+
+def menu(request):
+    categories = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
+    return render(request, 'menu.html', {'categories' : categories})
+
+def menu_add(request):
+    product_form = ProductForm(request.POST or None)
+    if request.method == 'POST':
+        if product_form.is_valid():
+            product_form.save()
+            product_form = ProductForm()
+    return render(request, 'menu_add.html', {'form' : product_form})
+
+def category_add(request):
+    category_form = CategoryForm(request.POST or None)
+    if request.method == 'POST':
+        if category_form.is_valid():
+            category_form.save()
+            category_form = CategoryForm()
+    return render(request, 'menu_category.html', {'form' : category_form})
+
+def edit_product(request, id):
+    product = Products.objects.get(id = id)
+    product_form = ProductForm(request.POST or None, instance=product)
+    if request.method == 'POST':
+        if product_form.is_valid():
+            product_form.save()
+            return redirect('menu')
+    return render(request, 'edit_product.html', {'form' : product_form})
+
+def delete_product(request,id):
+    product = Products.objects.get(id = id)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('menu')
+
+    return render(request, 'delete_product.html', {'product' : product})
+
+def category_manage(request):
+    categories = Categories.objects.all()
+    return render(request, 'category_manage.html', {'categories' : categories})
+
+def category_delete(request, id):
+    category = Categories.objects.get(id = id)
+    if request.method == 'POST':
+        category.delete()
+        return redirect('category_manage')
+    return render(request, 'category_delete.html', {'category' : category})
