@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path, PurePath
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+URL = '6ffd-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io'
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,8 +27,8 @@ SECRET_KEY = 'django-insecure-p@az7qf_5!8c%@i==13-az3(ii7o0by=l5_#eyq*fr(5bvsa#1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://*.0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io']
+ALLOWED_HOSTS = [f'{URL}', 'localhost']
+CSRF_TRUSTED_ORIGINS = [f'https://*.{URL}']
 
 
 # Application definition
@@ -124,4 +126,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-API_TOKEN = 'EAAMhCXZAGkHwBAHRndo5KvNDHvL0jsUcF1ZAkNHXZAkhfU2TIS3TKxZCrR5494rmnqo1CH2naBLc2ENtmL6dZAU45ycgMpuvhzmFleAu9KbZAOzX8UnKjsNOdrZBKTQaGG20EywSmExRiiEPOSAfl12t3XC32h2isoAoZBn0TMG0BxCx4B29r9xFOWBZAefHIOiZA5Q9lKrC4kQQZDZD'
+API_TOKEN = os.getenv('FB_KEY')

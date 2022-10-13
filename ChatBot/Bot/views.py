@@ -6,10 +6,10 @@ from .models import Messages, Contacts, Products, Categories, Orders, Order_Prod
 from .forms import ProductForm, CategoryForm
 import json
 from requests import Session
-from ChatBot.settings import API_TOKEN
+from ChatBot.settings import API_TOKEN, URL
 
 MENU_DIR = 'Menu/'
-MENU = 'https://0b3f-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io/menu'
+MENU = f'https://{URL}/menu'
 OPTIONS = "1-See Menu\n2-Make an Order\n3-Promotions\n4-Address\n5-Opening hours"
 NUMBER = '14991202420'
 
@@ -214,7 +214,7 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
 
 def chat(request): #Show all numbers that messaged
     contact = Contacts.objects.all()
-    return render(request, 'chat.html', {'contact' : contact})
+    return render(request, 'Chat/chat.html', {'contact' : contact})
 
 def chatting(request, id): #Send message to the user via textbox
     messages = Messages.objects.filter(contact_id = id)
@@ -224,7 +224,7 @@ def chatting(request, id): #Send message to the user via textbox
         toNumber = to[0].phone_number
         send_message(text, toNumber, to[0])
         
-    return render(request, 'chatting.html', {'messages' : messages})
+    return render(request, 'Chat/chatting.html', {'messages' : messages})
 
 def client_menu(request, number): #Get the itens that user wanna buy
     if request.method == 'POST':
@@ -243,7 +243,7 @@ def client_menu(request, number): #Get the itens that user wanna buy
 
         return redirect(f'./{number}/{order.id}')
     categories = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
-    return render(request, 'client_menu.html', {'categories':categories})
+    return render(request, 'Menu/client_menu.html', {'categories':categories})
 
 def complete_order(request, number, order): #Get Address and aditional info to place the order
     contact = Contacts.objects.get(phone_number = number)
@@ -260,11 +260,11 @@ def complete_order(request, number, order): #Get Address and aditional info to p
 
         update_order(contact,order)
         return HttpResponse('Order done!')
-    return render(request, "complete_order.html", {'name' : name, 'total' : total})
+    return render(request, "Menu/complete_order.html", {'name' : name, 'total' : total})
 
 def manage(request):
     orders = Orders.objects.filter(status__in = ('Delivering', 'Preparing'))
-    return render(request, 'manage.html', {'orders' : orders})
+    return render(request, 'Manage/manage.html', {'orders' : orders})
 
 def manage_order(request, id):
     p_order = Order_Products.objects.filter(order_id = id)
@@ -281,14 +281,14 @@ def manage_order(request, id):
             order.save()
             return redirect('manage')
 
-    return render(request, 'manage_order.html', {'products' : p_order, 'order' : order})
+    return render(request, 'Manage/manage_order.html', {'products' : p_order, 'order' : order})
 
 def home(request):
     return render(request, 'home.html', {})
 
 def menu(request):
     categories = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
-    return render(request, 'menu.html', {'categories' : categories})
+    return render(request, 'Menu/menu.html', {'categories' : categories})
 
 def menu_add(request):
     product_form = ProductForm(request.POST or None)
@@ -296,7 +296,7 @@ def menu_add(request):
         if product_form.is_valid():
             product_form.save()
             product_form = ProductForm()
-    return render(request, 'menu_add.html', {'form' : product_form})
+    return render(request, 'Menu/menu_add.html', {'form' : product_form})
 
 def category_add(request):
     category_form = CategoryForm(request.POST or None)
@@ -304,7 +304,7 @@ def category_add(request):
         if category_form.is_valid():
             category_form.save()
             category_form = CategoryForm()
-    return render(request, 'menu_category.html', {'form' : category_form})
+    return render(request, 'Menu/menu_category.html', {'form' : category_form})
 
 def edit_product(request, id):
     product = Products.objects.get(id = id)
@@ -313,7 +313,7 @@ def edit_product(request, id):
         if product_form.is_valid():
             product_form.save()
             return redirect('menu')
-    return render(request, 'edit_product.html', {'form' : product_form})
+    return render(request, 'Menu/edit_product.html', {'form' : product_form})
 
 def delete_product(request,id):
     product = Products.objects.get(id = id)
@@ -321,15 +321,15 @@ def delete_product(request,id):
         product.delete()
         return redirect('menu')
 
-    return render(request, 'delete_product.html', {'product' : product})
+    return render(request, 'Menu/delete_product.html', {'product' : product})
 
 def category_manage(request):
     categories = Categories.objects.all()
-    return render(request, 'category_manage.html', {'categories' : categories})
+    return render(request, 'Menu/category_manage.html', {'categories' : categories})
 
 def category_delete(request, id):
     category = Categories.objects.get(id = id)
     if request.method == 'POST':
         category.delete()
         return redirect('category_manage')
-    return render(request, 'category_delete.html', {'category' : category})
+    return render(request, 'Menu/category_delete.html', {'category' : category})
