@@ -6,16 +6,16 @@ Products<br>
 {% for product in products %}
     <p>{{ product.product_id.name }} - Quantity: {{ product.quantity }} - Individual Price: ${{ product.product_id.price }} - Total: ${{ product.total }}</p>
 {% endfor %}
+    Description: {{ order.observation }}<br>
     Total: ${{ order.total_value }}
     <form method="POST"> {% csrf_token %}
             <a href="{% url 'manage' %}"><button type="button">Go back</button></a>
         {% if order.status == 'Preparing' %}
-            <input type="text" name="id" hidden value="{{ order.id }}">
-            <input type="submit" value="Dispatch" name="button">
+            <input type="submit" value="Dispatch" name="button_dispatch">
         {% endif %}
         {% if order.status == 'Delivering' %}
-            <input type="text" name="id" hidden value="{{ order.id }}">
-            <input type="submit" value="Finish" name="button">
+            <input type="submit" value="Finish" name="button_finish">
         {% endif %}
+        <input type="submit" value="Print" name="print">
         </form>
 {% endblock %}

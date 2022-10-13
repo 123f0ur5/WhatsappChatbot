@@ -4,6 +4,7 @@ Menu<br>
 <a href="{% url 'menu_add' %}"><button>Add Product</button></a>
 <a href="{% url 'category_add' %}"><button>Add Category</button></a>
 <a href="{% url 'category_manage' %}"><button>Manage Category</button></a>
+<a href="{% url 'home' %}"><button type="button">Back</button></a>
 {% for category, products in categories.items %}
 {% if products.count > 0 %}
     <h1>{{ category.name }}</h1>

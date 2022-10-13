@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Messages, Contacts, Products, Categories, Orders, Order_Products
 from .forms import ProductForm, CategoryForm
-import json
+import json, os
 from requests import Session
 from ChatBot.settings import API_TOKEN, URL
 
@@ -12,6 +12,7 @@ MENU_DIR = 'Menu/'
 MENU = f'https://{URL}/menu'
 OPTIONS = "1-See Menu\n2-Make an Order\n3-Promotions\n4-Address\n5-Opening hours"
 NUMBER = '14991202420'
+DELIVERY_PRICE = 5.00
 
 RESPONSES = {
     "Greetings" : f"Welcome to the Pizzaria!\nMy name is Mara, the Robot!\nHere's a list of what i can do for you\n{OPTIONS}",
@@ -167,6 +168,53 @@ def send_interactive_message(text, toNumber, toId): #Interactive message templat
     except (ConnectionError) as e:
         print(e)
 
+def format_phone(number):
+    number = number[2:]
+    if len(number) == 10:
+        return '({}) {}-{}'.format(number[0:2], number[2:6], number[6:])
+    else:
+        return '({}) {} {}-{}'.format(number[0:2], number[2:3], number[3:7], number[7:])
+
+def print_receipt(id):
+    local = 'last_receipt.txt'
+    p_order = Order_Products.objects.filter(order_id = id)
+    order = Orders.objects.get(id=id)
+    prods = ""
+    for product in p_order:
+        p = f" {product.quantity}x {product.product_id.name} ${product.product_id.price}"
+        p = p.ljust(30, ' ')
+        p += f"${product.total}\n"
+        prods += p
+    receipt =f"\
+-----------------------------------------\n\
+                Test Name                \n\
+      Richard Chermisson Avenue, 379     \n\
+            (12) 3 45678-1234            \n\
+         CNPJ: 12 345 678/0001-12        \n\
+-----------------------------------------\n\
+       ** DOCUMENTO NÃO FISCAL **        \n\
+\n\
+ Impresso em {datetime.now().replace(microsecond=0)}\n\
+\n\
+ Cliente: {order.contact_id.name}\n\
+ Telefone: {format_phone(order.contact_id.phone_number)}\n\
+ Endereço: {order.deliver_address}\n\
+\n\
+          Pedido número: {order.pk}\n\
+ Qtd. Item  V. Unitário       Total\n\
+{prods}\
+-----------------------------------------\n\
+ Total:                       ${order.total_value}\n\
+ + Delivery:                  ${DELIVERY_PRICE}\n\
+ = Total a Pagar:             ${order.total_value + DELIVERY_PRICE}\n\
+-----------------------------------------\n\
+        Obrigado pela preferência!\n\
+-----------------------------------------\n\
+"
+    with open(f'{local}', 'w+') as f:
+        f.write(receipt)
+        os.startfile(f'{local}' ,'print')
+
 # Create your views here.
 @csrf_exempt
 def webhook(request): # Get all the data send from whatsapp api and registar contact if it didn't exist and messages
@@ -270,11 +318,13 @@ def manage_order(request, id):
     p_order = Order_Products.objects.filter(order_id = id)
     order = Orders.objects.get(id = id)
     if request.method == 'POST':
-        if request.POST.get('button') == 'Dispatch':
+        if request.POST.get('print'):
+            print_receipt(id)
+        if request.POST.get('button_dispatch'):
             order.status = 'Delivering'
             send_message(RESPONSES['Delivering'],order.contact_id.phone_number,order.contact_id)
             order.save()
-        else:
+        if request.POST.get('button_finish'):
             order.status = 'Done'
             send_interactive_message(RESPONSES["Finish"],order.contact_id.phone_number,order.contact_id)
             send_message(RESPONSES['Finish_Social'],order.contact_id.phone_number,order.contact_id)

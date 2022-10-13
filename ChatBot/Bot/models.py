@@ -8,6 +8,8 @@ class Contacts(models.Model):
 
     def get_absolute_url(self):
         return f"/chat/{self.id}"
+    def __str__(self):
+        return self.name
 
 class Messages(models.Model):
     from_number = models.CharField(max_length=16)
@@ -23,6 +25,8 @@ class Messages(models.Model):
 class Categories(models.Model):
     name = models.CharField(max_length=80)
     class Meta: verbose_name_plural = 'Categories'
+    def __str__(self):
+        return self.name
 
 class Products(models.Model):
     name = models.CharField(max_length=80)
@@ -34,6 +38,8 @@ class Products(models.Model):
         on_delete=models.CASCADE
     )
     class Meta: verbose_name_plural = 'Prodcuts'
+    def __str__(self):
+        return self.name
 
 class Orders(models.Model):
     contact_id = models.ForeignKey(Contacts, on_delete=models.CASCADE)

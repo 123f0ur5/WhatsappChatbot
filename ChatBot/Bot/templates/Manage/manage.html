@@ -6,4 +6,5 @@ Active Orders<br>
             <a href="{{ order.get_absolute_url }}">{{ order.contact_id.name }}</a>- {{ order.order_date|time:"H:i" }} - {{ order.status }}
         </p> 
     {% endfor %}
+    <a href="{% url 'home' %}"><button type="button">Back</button></a>
 {% endblock %}
