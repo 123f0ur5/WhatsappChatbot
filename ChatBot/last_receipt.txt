@@ -6,20 +6,21 @@
 -----------------------------------------
        ** DOCUMENTO NÃO FISCAL **        
 
- Impresso em 2022-10-13 14:56:19
+ Impresso em 2022-10-16 17:41:19
 
- Cliente: Lucas A.
- Telefone: (34) 9969-3425
- Endereço: 123  123 
-
-          Pedido número: 3
- Qtd. Item  V. Unitário       Total
- 1x 4 Cheese $15.0            $15.0
- 4x Sushi Roll $5.0           $20.0
+ Cliente: Hallef Martins
+ Telefone: (34) 9684-6825
+ Endereço: Rua U  6969242424 Tião coco
 -----------------------------------------
- Total:                       $35.0
+ Obs: hehe vem quente
+
+          Pedido número: 6
+ Qtd. Item  V. Unitário       Total
+ 1x Popo do Luquinha hehe $69.0$69.0
+-----------------------------------------
+ Total:                       $69.0
  + Delivery:                  $5.0
- = Total a Pagar:             $40.0
+ = Total a Pagar:             $74.0
 -----------------------------------------
         Obrigado pela preferência!
 -----------------------------------------

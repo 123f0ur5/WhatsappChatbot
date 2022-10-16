@@ -1,0 +1,13 @@
+.welcome {
+    position: relative;
+    font-size: 60px;
+}
+
+.welcome2 {
+    position: relative;
+    font-size: 30px;
+}
+
+.welcome, .welcome2 {
+    top: 80px;
+}

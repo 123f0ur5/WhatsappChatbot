@@ -1,5 +1,13 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
 {% block content %}
-    <a href="{% url 'chat' %}">Chat</a>
-    <a href="{% url 'manage' %}">Manage</a>
-    <a href="{% url 'menu' %}">Menu</a>
+    <center>
+        <p class="welcome"><b>Welcome to the ChatBot!</b></p><br>
+        <p class="welcome2">Your personal robot for automating your business</p>
+    </center>
 {% endblock %}

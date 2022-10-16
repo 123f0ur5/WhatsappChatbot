@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-URL = '6ffd-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io'
+URL = '2539-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io'
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #3rd apps
+    'django_cleanup.apps.CleanupConfig',
+    #My apps
     'Bot',
 ]
 
@@ -120,6 +123,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_ROOT = PurePath.joinpath(BASE_DIR,'media/')
+STATIC_ROOT = PurePath.joinpath(BASE_DIR,'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -127,3 +132,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 API_TOKEN = os.getenv('FB_KEY')
+
+STATICFILES_DIR = [
+    PurePath.joinpath(BASE_DIR,"static/")
+]

@@ -180,6 +180,9 @@ def print_receipt(id):
     p_order = Order_Products.objects.filter(order_id = id)
     order = Orders.objects.get(id=id)
     prods = ""
+    obs = ""
+    if order.observation != '':
+        obs = f' Obs: {order.observation}\n\n'
     for product in p_order:
         p = f" {product.quantity}x {product.product_id.name} ${product.product_id.price}"
         p = p.ljust(30, ' ')
@@ -199,7 +202,8 @@ def print_receipt(id):
  Cliente: {order.contact_id.name}\n\
  Telefone: {format_phone(order.contact_id.phone_number)}\n\
  Endereço: {order.deliver_address}\n\
-\n\
+-----------------------------------------\n\
+{obs}\
           Pedido número: {order.pk}\n\
  Qtd. Item  V. Unitário       Total\n\
 {prods}\
@@ -210,7 +214,7 @@ def print_receipt(id):
 -----------------------------------------\n\
         Obrigado pela preferência!\n\
 -----------------------------------------\n\
-"
+" #obs has 2 \n
     with open(f'{local}', 'w+') as f:
         f.write(receipt)
         os.startfile(f'{local}' ,'print')
@@ -223,6 +227,7 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
     if request.method == "POST":
         completed = False
         test = json.loads(request.body)
+        print(request.body)
         try:
             name = test['entry'][0]['changes'][0]['value']['contacts'][0]['profile']['name']
             from_number = test['entry'][0]['changes'][0]['value']['messages'][0]['from']
@@ -261,8 +266,17 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
     return HttpResponse("200")
 
 def chat(request): #Show all numbers that messaged
-    contact = Contacts.objects.all()
-    return render(request, 'Chat/chat.html', {'contact' : contact})
+    last_message = {id : Messages.objects.filter(contact_id = id).last() for id in Contacts.objects.all()}
+    if request.method == "POST":
+        id = request.POST.get('id')
+        messages = Messages.objects.filter(contact_id = id)
+        num_orders = Orders.objects.filter(contact_id = id).count()
+        active_orders = Orders.objects.filter(contact_id = id, status__in = ('Delivering', 'Preparing'))
+    else:
+        messages = None
+        active_orders = None
+        num_orders = 0
+    return render(request, 'Chat/chat.html', {'contact' : last_message, 'messages' : messages, 'num_orders' : num_orders, 'active_orders' : active_orders})
 
 def chatting(request, id): #Send message to the user via textbox
     messages = Messages.objects.filter(contact_id = id)
@@ -341,11 +355,13 @@ def menu(request):
     return render(request, 'Menu/menu.html', {'categories' : categories})
 
 def menu_add(request):
-    product_form = ProductForm(request.POST or None)
     if request.method == 'POST':
+        product_form = ProductForm(request.POST, request.FILES)
         if product_form.is_valid():
             product_form.save()
             product_form = ProductForm()
+    else:
+        product_form = ProductForm()
     return render(request, 'Menu/menu_add.html', {'form' : product_form})
 
 def category_add(request):
@@ -358,11 +374,13 @@ def category_add(request):
 
 def edit_product(request, id):
     product = Products.objects.get(id = id)
-    product_form = ProductForm(request.POST or None, instance=product)
     if request.method == 'POST':
+        product_form = ProductForm(request.POST, request.FILES, instance=product)
         if product_form.is_valid():
             product_form.save()
             return redirect('menu')
+    else:
+        product_form = ProductForm(instance=product)
     return render(request, 'Menu/edit_product.html', {'form' : product_form})
 
 def delete_product(request,id):

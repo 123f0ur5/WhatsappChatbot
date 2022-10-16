@@ -1,8 +1,60 @@
-{% block content %}
-Select the number
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
 
-{% for number in contact %}
-    <p><a href='{{ number.get_absolute_url }}'>{{ number.phone_number }}</a> - {{ number.name }}</p>
-{% endfor %}
-<a href="{% url 'home' %}"><button type="button">Back</button></a>
+{% block content %}
+<section id="chat">
+    <p class="contacts">Contacts</p>
+    <form method="POST"> {% csrf_token %}
+        {% for number, message in contact.items %}
+        <button type="submit" name="id" value="{{ number.get_id }}">
+            <div class="number"><span class="name">{{ number.name }}</span>
+            <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span><span class="message">{{ message.message_text }}</span></div>
+        </button>
+        {% endfor %}
+    </form>
+</section>
+<section id="chatting">
+    {% if messages %}
+        <div class="contact_info">
+            <div class="perfil">
+                <div class="firstletter">{{ messages.0.contact_id.name|make_list|first|upper }}</div>
+            </div>
+            <div class="info">
+                <span class="name_chat">{{ messages.0.contact_id.name }}</span><br>
+                <span class="number_chat">{{ messages.0.contact_id.phone_number}}</span>
+            </div>
+            <div class="order_info">
+                <span>Numbers of Orders: {{ num_orders }}</span><br>
+                <span>Active Order: {% if active_orders %}
+                    {% for order in active_orders %}
+                        <a href="{{ order.get_absolute_url }}">{{ order.id }}</a>
+                    {% endfor %}
+                    {% else %}
+                        No active orders
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="messages_chatbox">
+        {% for message in messages %}
+            <div class="message_chat">
+                <p> {{ message.message_text }}</p>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="text_input">
+            <form method="POST"> {% csrf_token %}
+                <textarea required></textarea>
+            </form>
+        </div>
+        <div class="send_text">
+            <img class="send" src="{% static 'img/send-button.png' %}">
+        </div>
+    {% else %}
+        <span class="noneselected"><center>Select a Contact to chat!!</center></span>
+    {% endif %}
+</section>
 {% endblock %}

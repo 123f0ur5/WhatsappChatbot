@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block styles %}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div>
+        <section id="nav">
+            <div class="chat">
+                <a href="{% url 'chat' %}"><img src="{% static 'img/whatsapp.png' %}">
+                <span class="whatsappspan">Whatsapp</span></a><br>
+            </div>
+            <div class="manage">
+                <a href="{% url 'manage' %}"><img src="{% static 'img/manage.png' %}">
+                <span class="managespan">Orders</span></a><br>
+            </div>
+            <div class="menu">
+                <a href="{% url 'menu' %}"><img src="{% static 'img/menu.png' %}">
+                <span class="menuspan">Menu</span></a><br>
+            </div>
+        </section>
+        <section id="content">
+            {% block content %}
+            {% endblock %}
+        </section>
+    </div>
+</body>
+</html>

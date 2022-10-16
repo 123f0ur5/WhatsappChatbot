@@ -1,4 +1,5 @@
 from django.db import models
+from ChatBot.settings import MEDIA_ROOT
 
 # Create your models here.
 class Contacts(models.Model):
@@ -6,8 +7,8 @@ class Contacts(models.Model):
     phone_number = models.CharField(max_length=16, unique=True)
     class Meta: verbose_name_plural = 'Contacts'
 
-    def get_absolute_url(self):
-        return f"/chat/{self.id}"
+    def get_id(self):
+        return f"{self.id}"
     def __str__(self):
         return self.name
 
@@ -31,7 +32,7 @@ class Categories(models.Model):
 class Products(models.Model):
     name = models.CharField(max_length=80)
     price = models.FloatField()
-    image = models.ImageField(blank=True)
+    image = models.ImageField(upload_to=MEDIA_ROOT,blank=True, null=True)
     description = models.TextField(blank=True)
     category = models.ForeignKey(
         Categories,

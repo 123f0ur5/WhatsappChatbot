@@ -6,8 +6,13 @@ Select your products
         {% if products.count > 0 %}
             <h1>{{ category.name }}</h1>
             {% for product in products %}
-                <p>{{ product.name }} - ${{ product.price }} - {{ product.description }}<input type="number" 
-                name="{{ product.id }}" min="0" value="0"></p>
+            <p>
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" height="250" width="250" >
+                {% endif %}
+                {{ product.name }} - ${{ product.price }} - {{ product.description }}<input type="number" 
+                name="{{ product.id }}" min="0" value="0">
+            </p>
             {% endfor %}
         {% endif %}
     {% endfor %}
