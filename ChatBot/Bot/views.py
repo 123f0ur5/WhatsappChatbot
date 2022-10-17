@@ -269,9 +269,13 @@ def chat(request): #Show all numbers that messaged
     last_message = {id : Messages.objects.filter(contact_id = id).last() for id in Contacts.objects.all()}
     if request.method == "POST":
         id = request.POST.get('id')
+        text = request.POST.get('text')
         messages = Messages.objects.filter(contact_id = id)
         num_orders = Orders.objects.filter(contact_id = id).count()
         active_orders = Orders.objects.filter(contact_id = id, status__in = ('Delivering', 'Preparing'))
+        if text != None:
+            to = Contacts.objects.get(id = id)
+            send_message(text, to.phone_number, to)
     else:
         messages = None
         active_orders = None

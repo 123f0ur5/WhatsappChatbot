@@ -47,12 +47,12 @@
     font-weight: bold;
 }
 
-button:hover {
+button.buttonnumber:hover {
     border-radius: 10px;
     background-color: #FFEBAD;
 }
 
-button {
+button.buttonnumber {
     position: relative;
     width: 100%;
     background: none;
@@ -175,16 +175,39 @@ textarea:hover {
 .send_text {
     border-top: 2px solid black;
     width: 10%;
-    height: 8.7%;
+    height: 8.4%;
     float: right;
     border-bottom-right-radius: 8px;
 }
 
-.send_text:hover {
+.send {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+}
+
+.buttonsend:hover {
     border-bottom-right-radius: 10px;
     background-color: #FFEBAD;
 }
 
-.send {
-    top: 12px;
+.buttonsend {
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.message_user {
+    background-color: #FFF6BF;
+}
+
+.message_system {
+    background-color: greenyellow;
 }

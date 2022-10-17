@@ -9,9 +9,10 @@
     <p class="contacts">Contacts</p>
     <form method="POST"> {% csrf_token %}
         {% for number, message in contact.items %}
-        <button type="submit" name="id" value="{{ number.get_id }}">
+        <button class="buttonnumber" type="submit" name="id" value="{{ number.get_id }}">
             <div class="number"><span class="name">{{ number.name }}</span>
-            <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span><span class="message">{{ message.message_text }}</span></div>
+            <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span>
+            <span class="message">{{ message.message_text }}</span></div>
         </button>
         {% endfor %}
     </form>
@@ -40,19 +41,27 @@
         </div>
         <div class="messages_chatbox">
         {% for message in messages %}
-            <div class="message_chat">
+            {% if message.contact_id.phone_number == message.from_number %}
+                <div class="message_user">
+                    <p> {{ message.message_text }}</p>
+                </div>
+            {% else %}
+            <div class="message_system">
                 <p> {{ message.message_text }}</p>
             </div>
+            {% endif %}
         {% endfor %}
         </div>
-        <div class="text_input">
-            <form method="POST"> {% csrf_token %}
-                <textarea required></textarea>
-            </form>
-        </div>
-        <div class="send_text">
-            <img class="send" src="{% static 'img/send-button.png' %}">
-        </div>
+        <form method="POST"> {% csrf_token %}
+            <div class="text_input">
+                    <textarea required name="text" placeholder="Message"></textarea>
+            </div>
+            <div class="send_text">
+                <button class="buttonsend" type="submit" name="id" value="{{ messages.0.contact_id.id }}">
+                    <img class="send" src="{% static 'img/send-button.png' %}">
+                </button>
+            </div>
+        </form>
     {% else %}
         <span class="noneselected"><center>Select a Contact to chat!!</center></span>
     {% endif %}
