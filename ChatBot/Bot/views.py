@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +13,7 @@ MENU = f'https://{URL}/menu'
 OPTIONS = "1-See Menu\n2-Make an Order\n3-Promotions\n4-Address\n5-Opening hours"
 NUMBER = '14991202420'
 DELIVERY_PRICE = 5.00
+DELIVERY_TIME =  timedelta(minutes=60)#in minutes
 
 RESPONSES = {
     "Greetings" : f"Welcome to the Pizzaria!\nMy name is Mara, the Robot!\nHere's a list of what i can do for you\n{OPTIONS}",
@@ -227,7 +228,6 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
     if request.method == "POST":
         completed = False
         test = json.loads(request.body)
-        print(request.body)
         try:
             name = test['entry'][0]['changes'][0]['value']['contacts'][0]['profile']['name']
             from_number = test['entry'][0]['changes'][0]['value']['messages'][0]['from']
@@ -265,32 +265,26 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
 
     return HttpResponse("200")
 
-def chat(request): #Show all numbers that messaged
+def chat(request, **kwargs): #Show all numbers that messaged
     last_message = {id : Messages.objects.filter(contact_id = id).last() for id in Contacts.objects.all()}
-    if request.method == "POST":
-        id = request.POST.get('id')
+    if request.method == "POST" or kwargs:
+        id = kwargs.get('id')
+        if request.POST.get('id') != None:
+            id = request.POST.get('id')
         text = request.POST.get('text')
-        messages = Messages.objects.filter(contact_id = id)
-        num_orders = Orders.objects.filter(contact_id = id).count()
-        active_orders = Orders.objects.filter(contact_id = id, status__in = ('Delivering', 'Preparing'))
         if text != None:
             to = Contacts.objects.get(id = id)
             send_message(text, to.phone_number, to)
+        user = Contacts.objects.get(id = id)
+        messages = Messages.objects.filter(contact_id = id).order_by('-id')
+        num_orders = Orders.objects.filter(contact_id = id).count()
+        active_orders = Orders.objects.filter(contact_id = id, status__in = ('Delivering', 'Preparing'))
     else:
         messages = None
         active_orders = None
         num_orders = 0
-    return render(request, 'Chat/chat.html', {'contact' : last_message, 'messages' : messages, 'num_orders' : num_orders, 'active_orders' : active_orders})
-
-def chatting(request, id): #Send message to the user via textbox
-    messages = Messages.objects.filter(contact_id = id)
-    if request.method == "POST":
-        text = request.POST.get('text')
-        to = Contacts.objects.filter(id = id)
-        toNumber = to[0].phone_number
-        send_message(text, toNumber, to[0])
-        
-    return render(request, 'Chat/chatting.html', {'messages' : messages})
+        user = None
+    return render(request, 'Chat/chat.html', {'contact' : last_message, 'messages' : messages, 'num_orders' : num_orders, 'active_orders' : active_orders, 'user' : user})
 
 def client_menu(request, number): #Get the itens that user wanna buy
     if request.method == 'POST':
@@ -329,8 +323,31 @@ def complete_order(request, number, order): #Get Address and aditional info to p
     return render(request, "Menu/complete_order.html", {'name' : name, 'total' : total})
 
 def manage(request):
-    orders = Orders.objects.filter(status__in = ('Delivering', 'Preparing'))
-    return render(request, 'Manage/manage.html', {'orders' : orders})
+    orders = Orders.objects.filter(status__in = ('Delivering', 'Preparing')).order_by('-order_date')
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        active_order = Orders.objects.get(id = id)
+
+        if request.POST.get('print'):
+            print_receipt(id)
+        if request.POST.get('button_dispatch'):
+            active_order.status = 'Delivering'
+            send_message(RESPONSES['Delivering'],active_order.contact_id.phone_number,active_order.contact_id)
+            active_order.save()
+        if request.POST.get('button_finish'):
+            active_order.status = 'Done'
+            send_interactive_message(RESPONSES["Finish"],active_order.contact_id.phone_number,active_order.contact_id)
+            send_message(RESPONSES['Finish_Social'],active_order.contact_id.phone_number,active_order.contact_id)
+            active_order.save()
+            return redirect('manage')
+
+        num_orders = Orders.objects.filter(contact_id = active_order.contact_id).count()
+        order_procuts = Order_Products.objects.filter(order_id = id)
+    else:
+        active_order = None
+        num_orders = 0
+        order_procuts = None
+    return render(request, 'Manage/manage.html', {'delivery_price' : DELIVERY_PRICE,'orders' : orders, 'delivery_time' : DELIVERY_TIME, 'active_order' : active_order, 'num_order' : num_orders, 'order_products' : order_procuts})
 
 def manage_order(request, id):
     p_order = Order_Products.objects.filter(order_id = id)

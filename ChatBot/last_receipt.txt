@@ -6,21 +6,20 @@
 -----------------------------------------
        ** DOCUMENTO NÃO FISCAL **        
 
- Impresso em 2022-10-16 17:41:19
+ Impresso em 2022-10-18 16:24:19
 
- Cliente: Hallef Martins
- Telefone: (34) 9684-6825
- Endereço: Rua U  6969242424 Tião coco
+ Cliente: Lucas A.
+ Telefone: (34) 9969-3425
+ Endereço: 123  13 
 -----------------------------------------
- Obs: hehe vem quente
-
-          Pedido número: 6
+          Pedido número: 7
  Qtd. Item  V. Unitário       Total
- 1x Popo do Luquinha hehe $69.0$69.0
+ 5x Salmon sushi $7.0         $35.0
+ 4x Biluga Belula $123.0      $492.0
 -----------------------------------------
- Total:                       $69.0
+ Total:                       $527.0
  + Delivery:                  $5.0
- = Total a Pagar:             $74.0
+ = Total a Pagar:             $532.0
 -----------------------------------------
         Obrigado pela preferência!
 -----------------------------------------

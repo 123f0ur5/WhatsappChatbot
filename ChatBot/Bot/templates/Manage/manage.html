@@ -1,10 +1,71 @@
-Active Orders<br>
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/manage.css' %}">
+{% endblock %}
+
 
 {% block content %}
-    {% for order in orders %}
-        <p>
-            <a href="{{ order.get_absolute_url }}">{{ order.contact_id.name }}</a>- {{ order.order_date|time:"H:i" }} - {{ order.status }}
-        </p> 
-    {% endfor %}
-    <a href="{% url 'home' %}"><button type="button">Back</button></a>
+    <section id="order_box">
+        <p class="orders">Orders</p>
+        <form method="POST"> {% csrf_token %}
+            {% for order in orders %}
+            <button class="buttonorder" type="submit" name="id" value="{{ order.get_id }}">
+                <div class="order">
+                    <span class="name">{{ order.contact_id.name }}</span><span class="order_id">#{{ order.id }}</span>
+                    <span class="time">Order time:{{ order.order_date|time:"H:i" }}</span><br><br>
+                    <span class="status">{{ order.status }}</span><span class="time_limit">Expected Delivery: {{ order.order_date|add:delivery_time|time:"H:i"}}</span>
+                </div>
+            </button>
+            {% endfor %}
+        </form>
+    </section>
+    <section id="active_order">
+        {% if active_order %}
+        <div class="header_order">
+            <span class="name_order">{{ active_order.contact_id.name }} </span>
+            <span class="order_number">Order #{{ active_order.id }}</span>
+            <span class="time_order">• Order placed <b>{{ active_order.order_date|time:"H:i"}}</b></span><br><br>
+            <span class="time_limit_order">Expected Delivery: <b>{{ active_order.order_date|add:delivery_time|time:"H:i"}}</b></span>
+            <span class="customer_order_number">{{ num_order }} Orders</span>
+            <a href="{% url 'chat' active_order.contact_id.id %}"><span class="customer_contact">Contact customer</span></a><br><br><br>
+            <span class="order_address"> Delivery to: {{ active_order.deliver_address }}</span>
+        </div>
+        <div class="body_order">
+            <div class="status_color">
+                <span class="order_status">Status: {{ active_order.status }}</span><br>
+            </div>
+            {% for product in order_products %}
+                <div class="list">
+                    <span class="item">{{ product.quantity}}x {{ product.product_id.name }}</span>
+                    <span class="total">$ {{ product.total|stringformat:".2f" }}</span><br>
+                </div>
+            {% endfor %}
+            <div class="details">
+                <div class="list">
+                    <span class="item">Delivery Tax</span>
+                    <span class="total">$ {{ delivery_price|stringformat:".2f" }}</span><br>
+                </div>
+                <div class="list">
+                    <span class="item">Total</span>
+                    <span class="total">$ {{ active_order.total_value|add:delivery_price|stringformat:".2f" }}</span><br>
+                </div>
+            </div>
+        </div>
+        <div class="buttons_order">
+            <form method="POST"> {% csrf_token %}
+                <input type="text" value="{{ active_order.id }}" hidden name="id">
+                {% if active_order.status == 'Preparing' %}
+                    <input class="dispatch_finish" type="submit" value="Dispatch" name="button_dispatch">
+                {% endif %}
+                {% if active_order.status == 'Delivering' %}
+                    <input class="dispatch_finish" type="submit" value="Finish" name="button_finish">
+                {% endif %}
+                <input class="print" type="submit" value="Print" name="print">
+            </form>
+        </div>
+        {% else %}
+            <span class="noneselected"><center>Select an Order!!</center></span>
+        {% endif %}
+    </section>
 {% endblock %}

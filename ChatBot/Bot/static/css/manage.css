@@ -1,0 +1,195 @@
+#order_box {
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 30%;
+    height: 97%;
+    background-color: #FFFFFF;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#active_order {
+    position: absolute;
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    margin-left: 425px;
+    width: 48%;
+    height: 97%;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.order {
+    height: 10%;
+    color: black;
+}
+
+.noneselected {
+    position: relative;
+    height: auto;
+    top: 40%;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.orders {
+    position: relative;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+button.buttonorder:hover {
+    border-radius: 10px;
+    background-color: #FFEBAD;
+}
+
+button.buttonorder {
+    position: relative;
+    width: 100%;
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.time {
+    position: relative;
+    float: right;
+    top: 5px;
+    right: 5px;
+}
+
+.name {
+    position: relative;
+    float: left;
+    margin-left: 20px;
+    top: 5px;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.status {
+    position: relative;
+    float: left;
+    left: 30px;
+    bottom: 5px;
+}
+
+.order_id {
+    position: relative;
+    margin-left: 5px;
+    top: 5px;
+    float: left;
+}
+
+.time_limit {
+    position: relative;
+    float: right;
+    right: 5px;
+    bottom: 5px;
+}
+
+.name_order {
+    position: relative;
+    font-size: 26px;
+    font-weight: bold;
+    left: 10px;
+    top: 5px;
+}
+
+.order_number, .time_order {
+    position: relative;
+    left: 15px;
+    top: 5px;
+    opacity: 0.7;
+    font-size: 17px;
+}
+
+.time_limit_order, .customer_order_number, .customer_contact, .order_address {
+    padding: 2px;
+    border: 1px solid black;
+    position: relative;
+    font-size: 17px;
+    left: 10px;
+    border-radius: 5px;
+    background-color: rgb(230, 230, 230);
+}
+
+.customer_contact:hover{
+    background-color: #FFEBAD;
+}
+
+.body_order {
+    margin: 10px;
+    border: 1px solid grey;
+    position: relative;
+    margin-top: 50px;
+}
+
+.list {
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    background-color: rgb(230, 230, 230);
+}
+
+.order_status {
+    top: 10px;
+}
+
+.status_color {
+    background-color: #FFF6BF;
+    height: 45px;
+}
+
+.order_status, .item {
+    position: relative;
+    left: 10px;
+    font-size: 22px;
+}
+
+.total {
+    top: 3px;
+    text-align: left;
+    position: relative;
+    float: right;
+    font-size: 17px;
+    min-width: 120px;
+}
+
+.buttons_order {
+    position: absolute;
+    width: 90%;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+
+.dispatch_finish, .print {
+    position: relative;
+    border-radius: 5px;
+    background-color: rgb(230, 230, 230);
+    font-size: 17px;
+    border: 1px solid black;
+    width: 100px;
+    padding: 5px;
+}
+
+.print {
+    left: 60px;
+}
+
+.dispatch_finish {
+    float: right;
+}
+
+.print:hover, .dispatch_finish:hover {
+    background-color: #FFEBAD;
+}

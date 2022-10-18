@@ -14,7 +14,7 @@
     position: absolute;
     background-color: #FFFFFF;
     margin-top: 10px;
-    margin-left: 405px;
+    margin-left: 425px;
     width: 48%;
     height: 97%;
     border: 2px solid black;
@@ -39,8 +39,7 @@
 }
 
 .name {
-    position: relative;
-    float: left;
+    position: absolute;
     left: 20px;
     top: 5px;
     font-size: 17px;
@@ -80,6 +79,7 @@ button.buttonnumber {
     position: relative;
     float: right;
     top: 5px;
+    right: 5px;
 }
 
 .noneselected {
@@ -107,7 +107,7 @@ button.buttonnumber {
     float: left;
     position: relative;
     border: 1px solid black;
-    background-color: #FFEBAD;
+    background-color: #FFF6BF;
     border-radius: 100%;
 }
 
@@ -149,6 +149,9 @@ a:hover {
     height: 80%;
     overflow-y: scroll;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: #ABD9FF;
 }
 
 .text_input {
@@ -164,7 +167,7 @@ a:hover {
 textarea {
     resize: none;
     width: 99%;
-    height: 50px;
+    height: 47px;
     border-bottom-left-radius: 8px;
 }
 
@@ -204,10 +207,37 @@ textarea:hover {
 	outline: inherit;
 }
 
+.message_user, .message_system {
+    position: relative;
+    border: 2px solid black;
+    width: 60%;
+    margin-bottom: 2px;
+    border-radius: 10px;
+}
+
 .message_user {
-    background-color: #FFF6BF;
+    background-color: #FFFFFF;
+    left: 2%;
 }
 
 .message_system {
-    background-color: greenyellow;
+    background-color: #FFF6BF;
+    left: 38%;
+}
+
+.message_user_chatbox, .message_system_chatbox {
+    left: 5px;
+    position: relative;
+    font-size: 15px;
+    font-family: 'Segoe UI';
+}
+
+.time_send_chatbox {
+    position: relative;
+    float: right;
+    top: 1px;
+    right: 5px;
+    font-size: 12px;
+    font-family: 'Segoe UI';
+    opacity: 0.8;
 }

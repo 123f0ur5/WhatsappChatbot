@@ -4,6 +4,7 @@ body{
 
 a:link, a:visited {
     text-decoration: none;
+    color: black;
 }
 img {
     position: relative;
@@ -44,4 +45,10 @@ img {
     height: 100%;
     min-height: 100vh;
     float: left;
+}
+
+.clock {
+    position: relative;
+    left: 50px;
+    top: 250px;
 }

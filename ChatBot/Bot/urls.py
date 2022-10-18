@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import manage_order, webhook, chat, chatting, client_menu, \
+from .views import manage_order, webhook, chat, client_menu, \
 complete_order, manage, home, menu, menu_add, category_add, edit_product, delete_product, category_manage, category_delete
 
 urlpatterns = [
     path('', home, name='home'),
     path('webhook/', webhook, name='webhook'),
     path('chat/', chat, name='chat'),
-    path('chat/<int:id>', chatting, name='chatting'),
+    path('chat/<int:id>', chat, name='chat'),
     path('menu', menu, name='menu'),
     path('menu/add_product/', menu_add, name='menu_add'),
     path('menu/add_category/', category_add, name='category_add'),

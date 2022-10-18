@@ -10,9 +10,11 @@
     <form method="POST"> {% csrf_token %}
         {% for number, message in contact.items %}
         <button class="buttonnumber" type="submit" name="id" value="{{ number.get_id }}">
-            <div class="number"><span class="name">{{ number.name }}</span>
-            <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span>
-            <span class="message">{{ message.message_text }}</span></div>
+            <div class="number">
+                <span class="name">{{ number.name }}</span>
+                <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span>
+                <span class="message">{{ message.message_text }}</span>
+            </div>
         </button>
         {% endfor %}
     </form>
@@ -21,11 +23,11 @@
     {% if messages %}
         <div class="contact_info">
             <div class="perfil">
-                <div class="firstletter">{{ messages.0.contact_id.name|make_list|first|upper }}</div>
+                <div class="firstletter">{{ user.name|make_list|first|upper }}</div>
             </div>
             <div class="info">
-                <span class="name_chat">{{ messages.0.contact_id.name }}</span><br>
-                <span class="number_chat">{{ messages.0.contact_id.phone_number}}</span>
+                <span class="name_chat">{{ user.name }}</span><br>
+                <span class="number_chat">{{ user.phone_number}}</span>
             </div>
             <div class="order_info">
                 <span>Numbers of Orders: {{ num_orders }}</span><br>
@@ -43,11 +45,11 @@
         {% for message in messages %}
             {% if message.contact_id.phone_number == message.from_number %}
                 <div class="message_user">
-                    <p> {{ message.message_text }}</p>
+                    <span class="message_user_chatbox">{{ message.message_text }}</span><span class="time_send_chatbox">{{ message.sent_datetime|date:"d/m H:i" }}</span>
                 </div>
             {% else %}
             <div class="message_system">
-                <p> {{ message.message_text }}</p>
+                <span class="message_system_chatbox">{{ message.message_text }}</span><span class="time_send_chatbox">{{ message.sent_datetime|date:"d/m H:i" }}</span>
             </div>
             {% endif %}
         {% endfor %}
@@ -57,7 +59,7 @@
                     <textarea required name="text" placeholder="Message"></textarea>
             </div>
             <div class="send_text">
-                <button class="buttonsend" type="submit" name="id" value="{{ messages.0.contact_id.id }}">
+                <button class="buttonsend" type="submit" name="id" value="{{ user.id }}">
                     <img class="send" src="{% static 'img/send-button.png' %}">
                 </button>
             </div>

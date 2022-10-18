@@ -50,8 +50,10 @@ class Orders(models.Model):
     status = models.CharField(max_length=12, blank=True)
     observation = models.CharField(max_length=250, blank=True)
 
+    def get_id(self):
+        return f"{self.id}"
     def get_absolute_url(self):
-        return f"/manage/{self.id}"
+        return f"../manage/{self.id}"
 
     class Meta: verbose_name_plural = 'Orders'
 
