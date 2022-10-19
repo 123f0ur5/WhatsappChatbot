@@ -298,10 +298,11 @@ def client_menu(request, number): #Get the itens that user wanna buy
                 total += product.price * int(quantity)
                 total_product = product.price * int(quantity)
                 Order_Products.objects.create(order_id = order, product_id = product, quantity = quantity, total = total_product)
-        order.total_value = total
-        order.save()
+        if total > 0: ##Return err message if no products where added
+            order.total_value = total
+            order.save()
 
-        return redirect(f'./{number}/{order.id}')
+            return redirect(f'./{number}/{order.id}')
     categories = {category : Products.objects.filter(category = category) for category in Categories.objects.all()}
     return render(request, 'Menu/client_menu.html', {'categories':categories})
 

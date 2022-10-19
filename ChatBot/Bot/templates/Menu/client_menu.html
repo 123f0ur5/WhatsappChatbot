@@ -1,21 +1,40 @@
-Select your products
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/client_menu.css' %}">
+{% endblock %}
 
 {% block content %}
 <form method="POST">{% csrf_token %}
     {% for category, products in categories.items %}
-        {% if products.count > 0 %}
-            <h1>{{ category.name }}</h1>
-            {% for product in products %}
-            <p>
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" height="250" width="250" >
-                {% endif %}
-                {{ product.name }} - ${{ product.price }} - {{ product.description }}<input type="number" 
-                name="{{ product.id }}" min="0" value="0">
-            </p>
+    {% if products.count > 0 %}
+        <fieldset class="category">
+                <legend><h1>{{ category.name }}</h1></legend>
+                {% for product in products %}
+                <div class="item">
+                    <div class="description">
+                        {{ product.description }}
+                    </div>
+                        <div class="image">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" width="150" height="150"> 
+                            {% else %}
+                                <img src="{% static 'img/no-image.jpg' %}" width="150" height="150">
+                            {% endif %}
+                        </div>
+                        <div class="name">
+                            {{ product.name }}<br>
+                        </div>
+                        <div class="value_quantity">
+                            ${{ product.price|stringformat:".2f" }} <input type="number" name="{{ product.id }}" min="0" value="0">
+                        </div>
+                </div>
+            
             {% endfor %}
-        {% endif %}
+        </fieldset>
+    {% endif %}
     {% endfor %}
-    <input type="submit" value="Place Order"></button>
+    <footer>
+        <input id="place" type="submit" value="Place Order">
+    </footer>
 </form>
 {% endblock %}
