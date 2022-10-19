@@ -152,7 +152,7 @@ a:hover {
 
 .messages_chatbox {
     position: relative;
-    height: calc(100% - 130px);
+    height: calc(100% - 125px);
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
@@ -173,9 +173,10 @@ textarea {
     position: relative;
     float: left;
     resize: none;
-    width: 88%;
-    height: 47px;
+    width: 90%;
+    height: 48px;
     border-bottom-left-radius: 8px;
+    box-sizing: border-box;
 }
 
 textarea:hover {
@@ -183,6 +184,7 @@ textarea:hover {
 }
 
 .send_text {
+    box-sizing: border-box;
     position: relative;
     float: right;
     border-top: 2px solid black;
