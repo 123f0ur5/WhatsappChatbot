@@ -28,7 +28,7 @@
             <span class="time_order">• Order placed <b>{{ active_order.order_date|time:"H:i"}}</b></span><br><br>
             <span class="time_limit_order">Expected Delivery: <b>{{ active_order.order_date|add:delivery_time|time:"H:i"}}</b></span>
             <span class="customer_order_number">{{ num_order }} Orders</span>
-            <a href="{% url 'chat' active_order.contact_id.id %}"><span class="customer_contact">Contact customer</span></a><br><br><br>
+            <a href="{% url 'chat_id' active_order.contact_id.id %}"><span class="customer_contact">Contact customer</span></a><br><br><br>
             <span class="order_address"> Delivery to: {{ active_order.deliver_address }}</span>
         </div>
         <div class="body_order">

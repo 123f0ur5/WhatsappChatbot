@@ -24,13 +24,13 @@ img {
     float: left;
 }
 
-#nav .chat, .manage, .menu{
-    width: 220px;
-    top: 50px;
-    left: 20px;
+.chat, .manage, .menu{
+    margin-top: 20%;
+    margin-left: 5%;
+    margin-right: 5%;
     position: relative;
     font-size: 30px;
-    margin-bottom: 40px;
+    overflow: hidden;
 }
 
 .whatsappspan, .managespan, .menuspan {

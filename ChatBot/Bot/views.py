@@ -322,10 +322,12 @@ def complete_order(request, number, order): #Get Address and aditional info to p
         return HttpResponse('Order done!')
     return render(request, "Menu/complete_order.html", {'name' : name, 'total' : total})
 
-def manage(request):
+def manage(request, **kwargs):
     orders = Orders.objects.filter(status__in = ('Delivering', 'Preparing')).order_by('-order_date')
-    if request.method == 'POST':
-        id = request.POST.get('id')
+    if request.method == 'POST' or kwargs:
+        id = kwargs.get('id')
+        if request.POST.get('id') != None:
+            id = request.POST.get('id')
         active_order = Orders.objects.get(id = id)
 
         if request.POST.get('print'):
@@ -348,25 +350,6 @@ def manage(request):
         num_orders = 0
         order_procuts = None
     return render(request, 'Manage/manage.html', {'delivery_price' : DELIVERY_PRICE,'orders' : orders, 'delivery_time' : DELIVERY_TIME, 'active_order' : active_order, 'num_order' : num_orders, 'order_products' : order_procuts})
-
-def manage_order(request, id):
-    p_order = Order_Products.objects.filter(order_id = id)
-    order = Orders.objects.get(id = id)
-    if request.method == 'POST':
-        if request.POST.get('print'):
-            print_receipt(id)
-        if request.POST.get('button_dispatch'):
-            order.status = 'Delivering'
-            send_message(RESPONSES['Delivering'],order.contact_id.phone_number,order.contact_id)
-            order.save()
-        if request.POST.get('button_finish'):
-            order.status = 'Done'
-            send_interactive_message(RESPONSES["Finish"],order.contact_id.phone_number,order.contact_id)
-            send_message(RESPONSES['Finish_Social'],order.contact_id.phone_number,order.contact_id)
-            order.save()
-            return redirect('manage')
-
-    return render(request, 'Manage/manage_order.html', {'products' : p_order, 'order' : order})
 
 def home(request):
     return render(request, 'home.html', {})

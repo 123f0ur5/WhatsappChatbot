@@ -12,7 +12,7 @@
         <button class="buttonnumber" type="submit" name="id" value="{{ number.get_id }}">
             <div class="number">
                 <span class="name">{{ number.name }}</span>
-                <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span>
+                <span class="time">{{ message.sent_datetime|date:"d/M/Y H:i" }}</span><br><br>
                 <span class="message">{{ message.message_text }}</span>
             </div>
         </button>
@@ -33,7 +33,7 @@
                 <span>Numbers of Orders: {{ num_orders }}</span><br>
                 <span>Active Order: {% if active_orders %}
                     {% for order in active_orders %}
-                        <a href="{{ order.get_absolute_url }}">{{ order.id }}</a>
+                    <a href="{% url 'manage_id' order.id %}">{{ order.id }}</a>
                     {% endfor %}
                     {% else %}
                         No active orders
@@ -55,14 +55,14 @@
         {% endfor %}
         </div>
         <form method="POST"> {% csrf_token %}
-            <div class="text_input">
-                    <textarea required name="text" placeholder="Message"></textarea>
-            </div>
-            <div class="send_text">
+        <div class="text_input">
+                <textarea required name="text" placeholder="Message"></textarea>
+             <div class="send_text">
                 <button class="buttonsend" type="submit" name="id" value="{{ user.id }}">
                     <img class="send" src="{% static 'img/send-button.png' %}">
                 </button>
             </div>
+        </div>
         </form>
     {% else %}
         <span class="noneselected"><center>Select a Contact to chat!!</center></span>

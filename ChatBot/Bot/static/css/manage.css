@@ -14,7 +14,8 @@
     position: absolute;
     background-color: #FFFFFF;
     margin-top: 10px;
-    margin-left: 425px;
+    right: 0;
+    margin-right: 0.65%;
     width: 48%;
     height: 97%;
     border: 2px solid black;

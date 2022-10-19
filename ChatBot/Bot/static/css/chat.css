@@ -1,5 +1,6 @@
 #chat {
     position: absolute;
+    float: left;
     margin-top: 10px;
     margin-left: 10px;
     width: 30%;
@@ -14,7 +15,8 @@
     position: absolute;
     background-color: #FFFFFF;
     margin-top: 10px;
-    margin-left: 425px;
+    right: 0;
+    margin-right: 0.65%;
     width: 48%;
     height: 97%;
     border: 2px solid black;
@@ -38,14 +40,6 @@
     color: black;
 }
 
-.name {
-    position: absolute;
-    left: 20px;
-    top: 5px;
-    font-size: 17px;
-    font-weight: bold;
-}
-
 button.buttonnumber:hover {
     border-radius: 10px;
     background-color: #FFEBAD;
@@ -61,15 +55,27 @@ button.buttonnumber {
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.name {
+    position: relative;
+    float: left;
+    margin-left: 20px;
+    top: 5px;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .message {
+    position: relative;
     float: left;
+    left: 30px;
+    bottom: 5px;
     text-align: left;
-    margin-left: 35px;
-    margin-top: 12px;
     display: block;
-    width: 300px;
+    width: 80%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -92,7 +98,7 @@ button.buttonnumber {
 
 .contact_info {
     width: 100%;
-    height: 11%;
+    height: 73px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom: 2px solid black;
@@ -102,8 +108,8 @@ button.buttonnumber {
     text-align: center;
     top: 5px;
     left: 10px;
-    width: 10%;
-    height: 80%;
+    width: 60px;
+    height: 60px;
     float: left;
     position: relative;
     border: 1px solid black;
@@ -146,7 +152,7 @@ a:hover {
 
 .messages_chatbox {
     position: relative;
-    height: 80%;
+    height: calc(100% - 130px);
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
@@ -156,17 +162,18 @@ a:hover {
 
 .text_input {
     border-top: 2px solid black;
-    float: left;
-    position: relative;
-    width: 90%;
-    height: 8.8%;
+    position: absolute;
+    width: 100%;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
+    bottom: 0;
 }
 
 textarea {
+    position: relative;
+    float: left;
     resize: none;
-    width: 99%;
+    width: 88%;
     height: 47px;
     border-bottom-left-radius: 8px;
 }
@@ -176,17 +183,17 @@ textarea:hover {
 }
 
 .send_text {
+    position: relative;
+    float: right;
     border-top: 2px solid black;
     width: 10%;
-    height: 8.4%;
-    float: right;
     border-bottom-right-radius: 8px;
 }
 
 .send {
-    position: absolute;
-    left: 12px;
-    top: 12px;
+    position: relative;
+    margin-top: 10px;
+    margin-right: 38%;
 }
 
 .buttonsend:hover {
@@ -195,9 +202,8 @@ textarea:hover {
 }
 
 .buttonsend {
-    position: absolute;
-    height: inherit;
-    width: inherit;
+    position: relative;
+    width: 100%;
     background: none;
 	color: inherit;
 	border: none;

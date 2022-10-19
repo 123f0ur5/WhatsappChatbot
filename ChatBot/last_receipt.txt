@@ -6,20 +6,21 @@
 -----------------------------------------
        ** DOCUMENTO NÃO FISCAL **        
 
- Impresso em 2022-10-18 16:24:19
+ Impresso em 2022-10-19 01:03:05
 
  Cliente: Lucas A.
  Telefone: (34) 9969-3425
- Endereço: 123  13 
+ Endereço: 123  123 
 -----------------------------------------
-          Pedido número: 7
+ Obs: Remove olives
+
+          Pedido número: 3
  Qtd. Item  V. Unitário       Total
- 5x Salmon sushi $7.0         $35.0
- 4x Biluga Belula $123.0      $492.0
+ 4x Sushi Roll $5.0           $20.0
 -----------------------------------------
- Total:                       $527.0
+ Total:                       $35.0
  + Delivery:                  $5.0
- = Total a Pagar:             $532.0
+ = Total a Pagar:             $40.0
 -----------------------------------------
         Obrigado pela preferência!
 -----------------------------------------
