@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-URL = '012a-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io'
+URL = 'bde1-2804-e8-80a2-a00-a405-72d0-b183-97df.eu.ngrok.io'
 
 
 # Quick-start development settings - unsuitable for production

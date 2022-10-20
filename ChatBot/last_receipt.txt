@@ -6,21 +6,21 @@
 -----------------------------------------
        ** DOCUMENTO NÃO FISCAL **        
 
- Impresso em 2022-10-19 03:58:04
+ Impresso em 2022-10-20 18:42:56
 
  Cliente: Lucas A.
  Telefone: (34) 9969-3425
- Endereço: 123  123 
+ Endereço: Tremembé Avenue, 152 - Zigoto - 12345-677
 -----------------------------------------
-          Pedido número: 8
+ Obs: Add more cheese!!
+
+          Pedido número: 5
  Qtd. Item  V. Unitário       Total
- 5x Sushi Roll $5.0           $25.0
- 2x Salmon sushi $7.0         $14.0
- 2x Biluga Belula $123.0      $246.0
+ 2x 4 Cheese $12.0            $24.0
 -----------------------------------------
- Total:                       $285.0
+ Total:                       $24.0
  + Delivery:                  $5.0
- = Total a Pagar:             $290.0
+ = Total a Pagar:             $29.0
 -----------------------------------------
         Obrigado pela preferência!
 -----------------------------------------
