@@ -1,8 +1,16 @@
-Delete Product<br>
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
 {% block content %}
-    You are sure that you want to delete {{ product.name }}?
+<fieldset class="djangoform">
+    <legend><h1>Deleting Product: {{ product.name }}</h1></legend>
+    <p>You are sure that you want to delete <b>{{ product.name }}</b>?</p>
     <form method="POST"> {% csrf_token %}
         <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
         <input type="submit" value="Delete" name="delete">
     </form>
+</fieldset>
 {% endblock %}

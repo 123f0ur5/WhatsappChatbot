@@ -33,7 +33,8 @@
         </div>
         <div class="body_order">
             <div class="status_color">
-                <span class="order_status">Status: {{ active_order.status }}</span><br>
+                <span class="order_status">Status: {{ active_order.status }}</span><br><br>
+                <span class="order_description">Observation: {{ active_order.observation }}</span>
             </div>
             {% for product in order_products %}
                 <div class="list">

@@ -148,10 +148,10 @@ button.buttonorder {
 
 .status_color {
     background-color: #FFF6BF;
-    height: 45px;
+    padding: 5px;
 }
 
-.order_status, .item {
+.order_status, .item, .order_description {
     position: relative;
     left: 10px;
     font-size: 22px;

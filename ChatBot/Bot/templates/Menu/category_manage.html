@@ -1,8 +1,17 @@
-Categories<br>
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
 {% block content %}
-    {% for category in categories %}
-        <p>{{ category.id }}-{{ category.name }} <a href="{% url 'category_delete' category.id %}"><button type="button">Delete</button></a></p>
-    {% endfor %}
-    <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
+    <fieldset class="djangoform">
+        <legend><h1>Register a Product</h1></legend>
+
+        {% for category in categories %}
+            <p>{{ category.name }} <a href="{% url 'category_delete' category.id %}"><button type="button">Delete</button></a></p>
+        {% endfor %}
+
+        <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
+    </fieldset>
 {% endblock %}

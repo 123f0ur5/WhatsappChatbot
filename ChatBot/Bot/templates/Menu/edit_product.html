@@ -1,9 +1,30 @@
-Editar Produto
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
 {% block content %}
+<fieldset class="djangoform">
+    <legend><h1>Editing Product: {{ form.name.value }}</h1></legend>
     <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-        {{ form.as_p }}
+        <label>Name:<br>
+            {{ form.name }}<br><br>
+        </label>
+        <label>Price:<br>
+            {{ form.price }}<br><br>
+        </label>
+        <label>Category:<br>
+            {{ form.category }}<br><br>
+        </label>
+        <label>Image:<br>
+            {{ form.image }}<br><br>
+        </label>
+        <label>Description:<br>
+            {{ form.description }}<br><br>
+        </label>
         <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
         <input type="submit" value="Edit">
     </form>
+</fieldset>
 {% endblock %}

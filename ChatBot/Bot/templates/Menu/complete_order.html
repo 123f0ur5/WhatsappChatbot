@@ -1,19 +1,56 @@
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
 {% block content %}
-It's almost done {{ name }}!!<br>
-The total is ${{ total }}
-
-
-    <form method="POST">{% csrf_token %}
-        <label>Address Line 1</label>
-        <input type="text" name="Address1" required><br>
-        <label>Address Line 2</label>
-        <input type="text" name="Address2"><br>
-        <label>Apartment, suite</label>
-        <input type="text" name="Apartment"><br>
-        <label>Zip Code</label>
-        <input type="text" name="Zip_code" required><br>
-        <label>Observation</label>
-        <textarea name ="Observation" rows="5" placeholder="If you need something else!" maxlength="250"></textarea><br>
-        <input type="submit" value="Complete Order">
-    </form>
+<style>
+    body {
+        background-color: #ABD9FF;
+    }
+</style>
+<fieldset class="djangoform">
+    <legend><h1>Finish Order</h1></legend>
+    <div class="extra_data">
+        <center><h1>Address</h1></center>
+        <p>It's almost done {{ name }}!!<br>
+        The total is <b>${{ total }}</b></p>
+        <form method="POST">{% csrf_token %}
+            <center>
+            <label>Address Line 1</label><br>
+            <input type="text" name="Address1" required><br><br>
+            <label>Address Line 2</label><br>
+            <input type="text" name="Address2"><br><br>
+            <label>Zip Code</label><br>
+            <input type="text" name="Zip_code" required><br><br>
+            <label>Observation</label><br>
+            <textarea name ="Observation" rows="5" cols="24" placeholder="If you need something else!" maxlength="250"></textarea><br><br>
+            <input type="submit" value="Complete Order">
+            </center>
+        </form>
+    </div>
+    <div class="products">
+        <center><h1>Order Products</h1></center>
+        {% for product in products %}
+                <div class="item">
+                    <div class="description">
+                        {{ product.product_id.description }}
+                    </div>
+                    <div class="image">
+                        {% if product.product_id.image %}
+                            <img src="{{ product.product_id.image.url }}" width="150" height="150"> 
+                        {% else %}
+                            <img src="{% static 'img/no-image.jpg' %}" width="150" height="150">
+                        {% endif %}
+                    </div>
+                    <div class="name">
+                        {{ product.product_id.name }}<br>
+                    </div>
+                    <div class="value_quantity">
+                        ${{ product.product_id.price|stringformat:".2f" }} <input class="quantity_input" type="number" name="{{ product.id }}" value="{{ product.quantity }}" readonly>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+</fieldset>
 {% endblock %}

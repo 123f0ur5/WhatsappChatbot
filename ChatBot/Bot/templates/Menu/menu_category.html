@@ -1,11 +1,18 @@
-Add product
+{% extends 'main.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
 {% block content %}
-    <form method="POST">{% csrf_token %}
-        {{ form.as_p }}
-        <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
-        <input type="submit" value="Save">
-    </form>
-
-    
+    <fieldset class="djangoform">
+        <legend><h1>Register a Category</h1></legend>
+        <form method="POST">{% csrf_token %}
+            <label>Name:<br>
+            {{ form.name }}<br><br>
+            </label>
+            <a href="{% url 'menu' %}"><button type="button" name="Cancel">Back</button></a>
+            <input type="submit" value="Save">
+        </form>
+    </fieldset>
 {% endblock %}

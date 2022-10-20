@@ -310,10 +310,11 @@ def complete_order(request, number, order): #Get Address and aditional info to p
     contact = Contacts.objects.get(phone_number = number)
     order = Orders.objects.get(id = order)
     name = contact.name
-    total = order.total_value
+    total = order.total_value + DELIVERY_PRICE
+    products = Order_Products.objects.filter(order_id = order.id)
     if request.method == 'POST':
         order.status = 'Preparing'
-        address = ' '.join((request.POST['Address1'], request.POST['Address2'], request.POST['Zip_code'], request.POST['Apartment']))
+        address = ' '.join((request.POST['Address1'], '-', request.POST['Address2'], '-', request.POST['Zip_code']))
         order.observation = request.POST['Observation']
         order.deliver_address = address
         order.order_date = datetime.now().replace(microsecond=0)
@@ -321,7 +322,7 @@ def complete_order(request, number, order): #Get Address and aditional info to p
 
         update_order(contact,order)
         return HttpResponse('Order done!')
-    return render(request, "Menu/complete_order.html", {'name' : name, 'total' : total})
+    return render(request, "Menu/complete_order.html", {'name' : name, 'total' : total, 'products' : products})
 
 def manage(request, **kwargs):
     orders = Orders.objects.filter(status__in = ('Delivering', 'Preparing')).order_by('-order_date')

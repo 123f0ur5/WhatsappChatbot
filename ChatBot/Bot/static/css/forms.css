@@ -1,16 +1,30 @@
-body {
-    left: 0;
-    top: 0;
-    background-color: #ABD9FF;
+.djangoform {
+    margin-left: 10px;
+    border-radius: 10px;
+    width: 98%;
+    box-sizing: border-box;
 }
 
-.category {
-    width: 98%;
+label, button, input, p {
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    font-size: 17px;
+}
+
+#id_category {
+    width: 204px;
+    height: 28px;
+}
+
+#id_description, textarea {
+    resize: none;
+}
+
+.extra_data {
     border: 2px solid grey;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    box-sizing: border-box;
-    border-radius: 10px;
+    padding: 10px;
+    position: relative;
+    float: left;
+    margin-right: 10px;
 }
 
 .item {
@@ -52,14 +66,6 @@ body {
     padding: 3px;
 }
 
-input {
-    margin-top: 2px;
-    position: relative;
-    float: right;
-    margin-right: 5px;
-    width: 50px;
-}
-
 .description {
     color: #FFFFFF;
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
@@ -79,28 +85,10 @@ input {
     transition: 0.3s ease-in;
 }
 
-footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-    height: 40px;
-    z-index: 2;
-}
-
-#place {
-    color: #FFFFFF;
-    font-size: 32px;
+.quantity_input {
+    margin-top: 2px;
     position: relative;
-    width: 100%;
-    height: 100%;
-    background: none;
-    border: none;
-}
-
-#place:hover {
-    color: #000000;
-    background-color: #FFF6BF;
+    float: right;
+    margin-right: 5px;
+    width: 50px;
 }

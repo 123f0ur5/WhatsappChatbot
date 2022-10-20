@@ -46,9 +46,3 @@ img {
     min-height: 100vh;
     float: left;
 }
-
-.clock {
-    position: relative;
-    left: 50px;
-    top: 250px;
-}
