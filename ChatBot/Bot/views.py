@@ -22,7 +22,6 @@ RESPONSES = {
     "Promotions" : f"There's no active promotions at moment\nBut you can see our menu here: {MENU}",
     "Address" : "We're located at Stree street, Avenue, 123 - Washinghton",
     "Opening" : "Sunday 11:00AM-11:30PM\nMonday Closed\nTuesday 11:00AM-11:30PM\nWednesday 11:00AM-11:30PM\nThursday 11:00AM-11:30PM\nFriday 11:00AM-11:30PM\nSaturday 11:00AM-11:30PM\n",
-    "Human" : "We're calling a Human, wait a second!", # not used yet
     "Options" : "1-See Menu\n2-Make an Order\n3-Promotions\n4-Address\n5-Opening hours",
     "404" : f"I didn't understand what you're saying, let's try again\n{OPTIONS}",
     "Delivering" : "Your order is on the way! It'll arrive soon",
@@ -32,7 +31,7 @@ RESPONSES = {
     "Good" : "We're looking to improve so the next time will be everything perfect!",
     "Bad" : "We're sad to hear that, can you explain why it was bad?",
     "404Order" : "We're sad to hear that, we're looking for what happened with your order. We will call you soon",
-}
+} #responses used by chatbot
 
 def start_order(contact): #Send the Greetings for the first message
     send_message(RESPONSES['Greetings'], contact.phone_number, contact)
@@ -48,7 +47,7 @@ def update_order(contact,order): #Update the order for the user, send him a wpp 
     message += f'\nTotal: ${order.total_value}\n\nWe\'re preparing your order, we\'ll notify you when it\'s on the way!'
     send_message(message, contact.phone_number, contact)
 
-def check_status(contact, message): #Check what's user want to do
+def check_status(contact, message): #Check what's user want to do and answer that
     if message.message_text == '1':
         answer = RESPONSES['Menu'] + f"/{contact.phone_number}"
     elif message.message_text == '2':
@@ -169,14 +168,14 @@ def send_interactive_message(text, toNumber, toId): #Interactive message templat
     except (ConnectionError) as e:
         print(e)
 
-def format_phone(number):
+def format_phone(number): #Format phone number to (xx) x xxxx-xxxx
     number = number[2:]
     if len(number) == 10:
         return '({}) {}-{}'.format(number[0:2], number[2:6], number[6:])
     else:
         return '({}) {} {}-{}'.format(number[0:2], number[2:3], number[3:7], number[7:])
 
-def print_receipt(id):
+def print_receipt(id): #models the receipt and print it
     local = 'last_receipt.txt'
     p_order = Order_Products.objects.filter(order_id = id)
     order = Orders.objects.get(id=id)
@@ -265,7 +264,7 @@ def webhook(request): # Get all the data send from whatsapp api and registar con
 
     return HttpResponse("200")
 
-def chat(request, **kwargs): #Show all numbers that messaged
+def chat(request, **kwargs): #Show all numbers that messaged and provide a way to send messages
     last_message = {id : Messages.objects.filter(contact_id = id).last() for id in Contacts.objects.all()}
     if request.method == "POST" or kwargs:
         id = kwargs.get('id')
@@ -298,7 +297,7 @@ def client_menu(request, number): #Get the itens that user wanna buy
                 total += product.price * int(quantity)
                 total_product = product.price * int(quantity)
                 Order_Products.objects.create(order_id = order, product_id = product, quantity = quantity, total = total_product)
-        if total > 0: ##Return err message if no products where added
+        if total > 0:
             order.total_value = total
             order.save()
 
